@@ -3,3 +3,4 @@ __pycache__/
 .chromadb/
 *.pyc
 .env
+tests/
