@@ -3,6 +3,4 @@ __pycache__/
 .chromadb/
 *.pyc
 .env
-tests/
-pytest.ini
-app/logs/*.json
+
