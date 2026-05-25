@@ -1,9 +1,9 @@
 import os
 import fitz
-
 from app.rag.chunking import split_text
 from app.rag.embeddings import generate_embeddings
 from app.rag.vectordb import save_to_db
+
 
 PDF_FOLDER = "data/pdfs"
 

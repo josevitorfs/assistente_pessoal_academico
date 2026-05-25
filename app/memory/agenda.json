@@ -1,0 +1,22 @@
+[
+  {
+    "data": "2026-05-23",
+    "tipo": "aula",
+    "descricao": "Aula de Modelagem de Dados às 19:00."
+  },
+  {
+    "data": "2026-05-24",
+    "tipo": "prova",
+    "descricao": "Prova de Inteligência Artificial às 08:00."
+  },
+  {
+    "data": "2026-05-25",
+    "tipo": "entrega",
+    "descricao": "Prazo final para envio do Trabalho Prático do Jarvis."
+  },
+  {
+    "data": "2026-05-28",
+    "tipo": "palestra",
+    "descricao": "Palestra sobre Large Language Models no auditório central."
+  }
+]

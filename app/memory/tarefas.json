@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "titulo": "Tarefa para segunda-feira da semana que vem",
+    "status": "Concluída",
+    "data_prazo": "2026-05-25"
+  },
+  {
+    "id": 2,
+    "titulo": "extensao",
+    "status": "Pendente",
+    "data_prazo": "2027-02-27"
+  },
+  {
+    "id": 3,
+    "titulo": "IA",
+    "status": "Pendente",
+    "data_prazo": "2026-05-24"
+  },
+  {
+    "id": 4,
+    "titulo": "APSOO",
+    "status": "Concluída",
+    "data_prazo": "2026-05-24"
+  },
+  {
+    "id": 5,
+    "titulo": "PROGWEB",
+    "status": "Pendente",
+    "data_prazo": "2026-05-27"
+  }
+]

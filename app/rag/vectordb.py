@@ -1,6 +1,7 @@
 import pickle
 import os
 
+
 DB_PATH = "app/memory/vector_store.pkl"
 
 def save_to_db(chunks: list, embeddings: list, filenames: list):
