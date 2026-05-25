@@ -14,7 +14,7 @@
   {
     "id": 3,
     "titulo": "IA",
-    "status": "Pendente",
+    "status": "Concluída",
     "data_prazo": "2026-05-24"
   },
   {
@@ -40,5 +40,11 @@
     "titulo": "LEDES",
     "status": "Pendente",
     "data_prazo": "06/06/2028"
+  },
+  {
+    "id": 8,
+    "titulo": "Estudar IA",
+    "status": "Pendente",
+    "data_prazo": "2026-05-24"
   }
 ]
