@@ -1,9 +1,10 @@
 from app.tools.agenda import consultar_agenda
 from app.tools.tarefas import listar_tarefas
 from app.llm.client import ask_llm
-
+from app.tools.rag_tool import buscar_material_rag
 
 def planejar_estudos(pergunta_usuario, **kwargs):
+    materiais = buscar_material_rag(pergunta_usuario)
 
     texto = pergunta_usuario.lower()
 
@@ -55,6 +56,9 @@ Agenda do aluno:
 
 Tarefas do aluno:
 {tarefas}
+
+Materiais relevantes:
+{materiais}
 
 REGRAS IMPORTANTES:
 
