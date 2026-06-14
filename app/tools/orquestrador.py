@@ -10,6 +10,10 @@ from app.tools.active_recall import (
     gerar_pergunta_active_recall,
     avaliar_resposta_active_recall
 )
+from app.tools.rag_tool import (
+    buscar_material_rag,
+    obter_fontes_recuperadas
+)
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -148,13 +152,16 @@ FERRAMENTAS_CONFIG = [
     }
 ]
 
-def registrar_log_ferramenta(nome_ferramenta: str, argumentos: dict, resultado: str):
+def registrar_log_ferramenta(nome_ferramenta, argumentos, resultado,fontes=None):
     log_entry = {
-        "timestamp": datetime.now().isoformat(),
-        "ferramenta": nome_ferramenta,
-        "entrada": argumentos,
-        "saida": resultado
+    "timestamp": datetime.now().isoformat(),
+    "ferramenta": nome_ferramenta,
+    "entrada": argumentos,
+    "saida": resultado
     }
+
+    if fontes:
+        log_entry["fontes_recuperadas"] = fontes
     
     logs = []
     if os.path.exists(LOG_PATH):
@@ -194,5 +201,15 @@ def executar_ferramenta(nome_ferramenta: str, argumentos: dict) -> str:
         traceback.print_exc()
         resultado = f"Erro na execução da ferramenta: {str(e)}"
         
-    registrar_log_ferramenta(nome_ferramenta, argumentos, resultado)
+    fontes = None
+
+    if (
+        nome_ferramenta == "buscar_material_rag"
+        and "termo_busca" in argumentos
+    ):
+        fontes = obter_fontes_recuperadas(
+            argumentos["termo_busca"]
+        )
+
+    registrar_log_ferramenta(nome_ferramenta, argumentos, resultado, fontes)
     return resultado

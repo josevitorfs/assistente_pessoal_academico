@@ -23,4 +23,10 @@ def retrieve_relevant_chunks(query: str, top_k: int = 3) -> list:
         
     scored_chunks.sort(key=lambda x: x[0], reverse=True)
     
-    return [item for score, item in scored_chunks[:top_k]]
+    return [
+        {
+            **item,
+            "score": float(score)
+        }
+        for score, item in scored_chunks[:top_k]
+        ]

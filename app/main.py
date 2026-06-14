@@ -7,10 +7,25 @@ from app.tools.orquestrador import executar_ferramenta
 from pathlib import Path
 
 ACTIVE_RECALL_PATH = Path("app/memory/active_recall.json")
+LOG_PATH = Path("app/logs/tool_logs.json")
 
 load_dotenv()
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+def adicionar_resposta_rag(resposta):
+    try:
+        with open(LOG_PATH, "r", encoding="utf-8") as f:
+            logs = json.load(f)
+
+        if logs:
+            logs[-1]["resposta_gerada"] = resposta
+
+            with open(LOG_PATH, "w", encoding="utf-8") as f:
+                json.dump(logs, f, indent=2, ensure_ascii=False)
+
+    except Exception:
+        pass
 
 def existe_pergunta_active_recall_pendente():
     if not ACTIVE_RECALL_PATH.exists():
@@ -134,20 +149,26 @@ def executar_fluxo_jarvis(pergunta_usuario: str) -> str:
             return resultado_local
 
         if acao == "buscar_material_rag":
+
             prompt_resposta = (
                 f"O estudante perguntou: '{pergunta_usuario}'\n\n"
                 f"Responda de forma didática baseando-se estritamente nestes trechos do material dele:\n"
                 f"{resultado_local}"
             )
-            return ask_llm(
-                            messages=[
-                                {
-                                    "role": "user",
-                                    "content": prompt_resposta
-                                }
-                            ],
-                            temperature=0.4
-                        )
+
+            resposta_final = ask_llm(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt_resposta
+                    }
+                ],
+                temperature=0.4
+            )
+
+            adicionar_resposta_rag(resposta_final)
+
+            return resposta_final
 
         return ask_llm(
                         messages=[
@@ -162,6 +183,7 @@ def executar_fluxo_jarvis(pergunta_usuario: str) -> str:
                         ],
                         temperature=0.5
                     )
+    
 
     except Exception as e:
         return f"Erro na orquestração central do Jarvis: {str(e)}"
