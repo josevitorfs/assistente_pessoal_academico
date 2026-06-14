@@ -41,7 +41,7 @@ def adicionar_tarefa(titulo=None, data_prazo="undefined", nome_tarefa=None, tare
     prazo_str = f" com prazo para {data_prazo}" if data_prazo != "undefined" else ""
     return f"Tarefa '[{novo_id}] {titulo}' adicionada com sucesso{prazo_str}."
 
-def listar_tarefas() -> str:
+def listar_tarefas(status=None, **kwargs) -> str:
     if not os.path.exists(TAREFAS_PATH):
         return "Sua Lista de Tarefas está vazia."
 
@@ -51,6 +51,12 @@ def listar_tarefas() -> str:
             if not conteudo:
                 return "Sua Lista de Tarefas está vazia."
             tarefas = json.loads(conteudo)
+        if status:
+            tarefas = [
+                t
+                for t in tarefas
+                if t["status"].lower() == status.lower()
+            ]
     except Exception as e:
         return f"Erro interno ao decodificar o JSON: {str(e)}"
 
@@ -85,12 +91,15 @@ def concluir_tarefa(id_tarefa=None, tarefa_id=None, tarefa=None, titulo=None, no
             tarefa_encontrada = item
             break
 
-        if item.get("titulo", "").lower() == str(identificador).lower():
+        if str(identificador).lower() in item.get("titulo", "").lower():
             tarefa_encontrada = item
             break
 
     if tarefa_encontrada is None:
         return "Tarefa não encontrada."
+    
+    if tarefa_encontrada["status"] == "Concluída":
+        return f"A tarefa '{tarefa_encontrada['titulo']}' já estava concluída."
 
     tarefa_encontrada["status"] = "Concluída"
 
