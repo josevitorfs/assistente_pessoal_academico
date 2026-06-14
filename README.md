@@ -217,6 +217,23 @@ Para essa funcionalidade, o sistema apresenta melhores resultados quando as inst
 * "Listar tarefas"
 * "Concluir tarefa 2"
 
+## 4. Planejamento de Estudos
+
+O sistema combina informações provenientes da agenda acadêmica, lista de tarefas e materiais recuperados via RAG para auxiliar o estudante na tomada de decisões sobre seus estudos.
+
+Exemplos de consultas:
+
+* "Monte um plano de estudos para esta semana"
+* "O que devo priorizar hoje?"
+* "Como devo organizar meus estudos?"
+
+Dependendo da solicitação, o sistema pode:
+
+* gerar cronogramas semanais;
+* sugerir prioridades;
+* recomendar conteúdos para revisão;
+* organizar sequências de estudo com base nos compromissos acadêmicos.
+
 ---
 
 # Implementação do RAG
@@ -260,11 +277,46 @@ O sistema implementa tool calling utilizando roteamento por LLM. A Gemma recebe 
 
 Ferramentas implementadas foram:
 
+Ferramentas implementadas:
+
 * consultar_agenda
 * listar_tarefas
 * adicionar_tarefa
 * concluir_tarefa
 * buscar_material_rag
+* planejar_estudos
+* gerar_pergunta_active_recall
+* avaliar_resposta_active_recall
+
+---
+
+# Funcionalidades de Aprendizado
+
+O projeto implementa funcionalidades voltadas diretamente ao aprendizado do estudante.
+
+## Active Recall
+
+O sistema é capaz de gerar perguntas de revisão automaticamente a partir dos materiais acadêmicos armazenados no sistema.
+
+Fluxo:
+
+1. O usuário solicita uma pergunta sobre determinado tema;
+2. O RAG recupera trechos relevantes dos materiais;
+3. A LLM gera uma pergunta de revisão;
+4. O aluno responde;
+5. O sistema avalia a resposta.
+
+## Avaliação de Respostas
+
+Após receber a resposta do aluno, o sistema realiza uma correção automática baseada no material recuperado.
+
+As respostas podem ser classificadas como:
+
+* Correta
+* Parcialmente correta
+* Incorreta
+
+Além da classificação, o sistema fornece uma justificativa explicando os pontos fortes e as limitações da resposta apresentada.
 
 ---
 
@@ -281,8 +333,13 @@ app/logs/tool_logs.json
 ---
 
 # Dataset
+## Origem dos Dados
 
-O dataset do projeto é composto por documentos acadêmicos focados em inteligência artificial, abrangendo tópicos como machine learning, deep learning, NLP, transformers e embeddings. Vale ressaltar que todo o material foi utilizado exclusivamente para fins acadêmicos e experimentais.
+Os documentos utilizados foram obtidos a partir de materiais acadêmicos disponibilizados em disciplinas da graduação, apostilas técnicas e materiais de estudo relacionados a Inteligência Artificial e Aprendizado de Máquina.
+
+## Limitações do Dataset
+
+Alguns documentos apresentam diferenças de formatação, nível de detalhamento e profundidade dos conteúdos. Além disso, determinados tópicos possuem quantidade limitada de material, o que pode impactar a recuperação de contexto pelo sistema.
 
 ---
 
@@ -295,6 +352,12 @@ A implementação utiliza um armazenamento vetorial local e simplificado, adequa
 Outro ponto importante é a limitação da janela de contexto da LLM, o que faz com que apenas parte dos trechos recuperados possa ser utilizada na geração das respostas. O desempenho também depende diretamente da qualidade dos documentos utilizados no dataset.
 
 Por fim, a recuperação de informações é baseada principalmente em similaridade semântica, sem técnicas mais avançadas de reranking ou refinamento contextual.
+
+## Limitações do Active Recall
+
+A implementação atual mantém apenas uma pergunta pendente por vez. Dessa forma, caso o usuário solicite uma nova pergunta antes de responder a anterior, o sistema pode interpretar incorretamente a intenção do usuário.
+
+Essa limitação foi identificada durante os testes e representa uma possível melhoria futura do projeto.
 
 ---
 

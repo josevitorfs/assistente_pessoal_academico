@@ -3,14 +3,11 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-
 load_dotenv()
-
 
 API_KEY = os.getenv("OPENAI_API_KEY")
 BASE_URL = os.getenv("OPENAI_BASE_URL")
 MODEL_NAME = os.getenv("MODEL_NAME")
-
 
 client = OpenAI(
     base_url=BASE_URL,
@@ -18,26 +15,12 @@ client = OpenAI(
 )
 
 
-def ask_gemma(prompt):
+def ask_llm(messages, temperature=0.3):
 
-    try:
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        temperature=temperature,
+        messages=messages
+    )
 
-        response = client.chat.completions.create(
-
-            model=MODEL_NAME,
-
-            temperature=0.3,
-
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-
-        return response.choices[0].message.content
-
-    except Exception as e:
-
-        return f"Erro ao acessar LLM: {str(e)}"
+    return response.choices[0].message.content

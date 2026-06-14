@@ -1,10 +1,13 @@
 import json
 import os
 
-
 AGENDA_PATH = "app/memory/agenda.json"
 
-def consultar_agenda(data_pesquisa: str = None) -> str:
+def consultar_agenda(data_pesquisa=None, data=None, tipo=None, **kwargs):
+
+    if data and not data_pesquisa:
+        data_pesquisa = data
+
     if not os.path.exists(AGENDA_PATH):
         return "A agenda está vazia ou o arquivo não foi encontrado."
 
@@ -14,21 +17,24 @@ def consultar_agenda(data_pesquisa: str = None) -> str:
     except Exception as e:
         return f"Erro ao ler o arquivo de agenda: {str(e)}"
 
-    if data_pesquisa:
-        filtrados = [c for c in compromissos if c["data"] == data_pesquisa]
-        if not filtrados:
-            return f"Nenhum compromisso agendado para o dia {data_pesquisa}."
-        
-        resultado = f"Compromissos para {data_pesquisa}:\n"
-        for c in filtrados:
-            resultado += f"- [{c['tipo'].upper()}] {c['descricao']}\n"
-        return resultado
+    if tipo:
+        compromissos = [
+            c for c in compromissos
+            if c["tipo"].upper() == tipo.upper()
+        ]
 
-    else:
-        if not compromissos:
-            return "Nenhum compromisso na agenda."
-        
-        resultado = "Próximos compromissos na agenda:\n"
-        for c in compromissos:
-            resultado += f"- {c['data']}: [{c['tipo'].upper()}] {c['descricao']}\n"
-        return resultado
+    if data_pesquisa:
+        compromissos = [
+            c for c in compromissos
+            if c["data"] == data_pesquisa
+        ]
+
+    if not compromissos:
+        return "Nenhum compromisso encontrado."
+
+    resultado = "Compromissos encontrados:\n"
+
+    for c in compromissos:
+        resultado += f"- {c['data']}: [{c['tipo'].upper()}] {c['descricao']}\n"
+
+    return resultado
