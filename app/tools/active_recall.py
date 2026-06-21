@@ -10,7 +10,11 @@ ACTIVE_RECALL_PATH = Path("app/memory/active_recall.json")
 def carregar_dados():
     if ACTIVE_RECALL_PATH.exists():
         with open(ACTIVE_RECALL_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
+            dados = json.load(f)
+        # Garante que as chaves existam mesmo em arquivos antigos
+        dados.setdefault("aguardando_resposta", False)
+        dados.setdefault("historico", [])
+        return dados
     return {
         "aguardando_resposta": False,
         "historico": []
